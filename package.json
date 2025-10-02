@@ -1,0 +1,28 @@
+{
+  "name": "qr-attendance-system",
+  "version": "1.0.0",
+  "description": "QR-based Attendance Management System",
+  "scripts": {
+    "dev": "wrangler pages dev public --d1 DB=attendance-db",
+    "deploy": "wrangler pages deploy public --project-name qr-attendance",
+    "db:create": "wrangler d1 create attendance-db",
+    "db:migrate": "wrangler d1 execute attendance-db --file=./schema.sql",
+    "db:migrate:local": "wrangler d1 execute attendance-db --local --file=./schema.sql",
+    "db:query": "wrangler d1 execute attendance-db --command",
+    "logs": "wrangler pages deployment tail",
+    "build": "echo 'No build step required'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "qr-code",
+    "attendance",
+    "cloudflare",
+    "d1",
+    "pages"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.78.0"
+  }
+}

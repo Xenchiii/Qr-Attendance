@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - QR Attendance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light-gray: #f3f4f6;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-5px);
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            animation: fadeIn 0.8s ease;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--light-gray);
+        }
+
+        .card-header i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .card-header h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .form-label i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .qr-container {
+            text-align: center;
+            padding: 40px;
+            background: var(--light-gray);
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .qr-container h3 {
+            color: var(--dark);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+
+        .qr-wrapper {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        #studentqrcode {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .qr-info {
+            margin-top: 20px;
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 18px 28px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideInRight 0.4s ease;
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255,255,255,0.2);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Portal Selection
+        </a>
+
+        <div class="header">
+            <h1><i class="fas fa-user-graduate"></i> Student Portal</h1>
+            <p>Generate your attendance QR code</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-id-card"></i>
+                <h2>Generate Your QR Code</h2>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-user"></i> Full Name
+                </label>
+                <input type="text" class="form-input" id="studentName" placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-hashtag"></i> Student ID
+                </label>
+                <input type="text" class="form-input" id="studentId" placeholder="Enter your student ID">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-book-open"></i> Select Your Class
+                </label>
+                <select class="form-select" id="studentClass">
+                    <option value="">Choose your class</option>
+                    <option value="SDF04">SDF04 - System Design Fundamentals</option>
+                    <option value="IM2">IM2 - Information Management 2</option>
+                    <option value="SP2">SP2 - Software Programming 2</option>
+                    <option value="SIA1">SIA1 - System Integration & Architecture 1</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" id="generateQRBtn">
+                <i class="fas fa-qrcode"></i> Generate My QR Code
+            </button>
+
+            <div id="studentQRContainer" class="qr-container hidden">
+                <h3>Your Attendance QR Code</h3>
+                <div class="qr-wrapper">
+                    <canvas id="studentqrcode"></canvas>
+                </div>
+                <p class="qr-info">
+                    <strong>Save this QR code and show it to your teacher for attendance.</strong><br>
+                    You can download or print it for future use.
+                </p>
+                <div class="button-group">
+                    <button class="btn btn-success" id="downloadQRBtn">
+                        <i class="fas fa-download"></i> Download QR
+                    </button>
+                    <button class="btn btn-outline" id="printQRBtn">
+                        <i class="fas fa-print"></i> Print QR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="notification" class="notification hidden"></div>
+</body>
+<script>
+var API_URL = window.location.origin;document.getElementById('generateQRBtn').addEventListener('click',generateStudentQR);document.getElementById('downloadQRBtn').addEventListener('click',downloadQRCode);document.getElementById('printQRBtn').addEventListener('click',printQRCode);function generateStudentQR(){var a=document.getElementById('studentName').value.trim(),b=document.getElementById('studentId').value.trim(),c=document.getElementById('studentClass').value;if(!a||!b||!c){showNotification('Please fill in all fields','error');return}showLoading();var d={name:a,id:b,class:c},e=JSON.stringify(d);fetch(API_URL+'/api/register_student',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({student_id:b,student_name:a,class:c,qr_code:e})}).then(function(f){return f.json()}).then(function(f){if(f.success){var g=document.getElementById('studentqrcode'),h=new QRious({element:g,value:e,size:300,background:'#ffffff',foreground:'#1f2937',level:'H'});document.getElementById('studentQRContainer').classList.remove('hidden');showNotification('QR code generated successfully!','success')}else{showNotification(f.message||'Error generating QR code','error')}hideLoading()}).catch(function(f){showNotification('Error: '+f.message,'error');hideLoading()})}function downloadQRCode(){var a=document.getElementById('studentqrcode');if(a){var b=document.getElementById('studentName').value,c=document.createElement('a');c.download=b+'-attendance-qr.png';c.href=a.toDataURL('image/png');c.click();showNotification('QR code downloaded!','success')}}function printQRCode(){var a=document.getElementById('studentName').value,b=document.getElementById('studentId').value,c=document.getElementById('studentClass').value,d=document.getElementById('studentqrcode'),e=window.open('','_blank'),f='<!DOCTYPE html><html><head><title>QR Code - '+a+'</title>';f+='<style>body{font-family:Arial,sans-serif;text-align:center;padding:40px}';f+='h1{color:#1f2937;margin-bottom:10px}.info{margin:20px 0;color:#6b7280}';f+='img{margin:30px 0;border:2px solid #e5e7eb;padding:20px}</style></head><body>';f+='<h1>Attendance QR Code</h1><div class="info"><h2>'+a+'</h2>';f+='<p>Student ID: '+b+'</p><p>Class: '+c+'</p></div>';f+='<img src="'+d.toDataURL('image/png')+'" alt="QR Code">';f+='<p><strong>Present this QR code to your teacher for attendance</strong></p></body></html>';e.document.write(f);e.document.close();e.print()}function showLoading(){document.getElementById('loading').classList.remove('hidden')}function hideLoading(){document.getElementById('loading').classList.add('hidden')}function showNotification(a,b){var c=document.getElementById('notification'),d=b==='success'?'check-circle':'exclamation-circle';c.innerHTML='<i class="fas fa-'+d+'"></i>'+a;c.className='notification '+b;c.classList.remove('hidden');setTimeout(function(){c.classList.add('hidden')},4000)}
+</script>
+</html>

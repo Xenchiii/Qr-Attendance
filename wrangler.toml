@@ -1,0 +1,8 @@
+name = "qr-attendance-backend"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "attendance-db"
+database_id = "e82715e9-5103-4b2c-86ce-b032d1f254d6"
