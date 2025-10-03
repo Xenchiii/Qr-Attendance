@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Portal - QR Attendance</title>
+    <title>Admin Login - QR Attendance</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -27,31 +27,16 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.6s ease;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.95;
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            animation: fadeInUp 0.6s ease;
         }
 
         .back-btn {
@@ -65,6 +50,7 @@
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .back-btn:hover {
@@ -72,65 +58,49 @@
             transform: translateX(-5px);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-            animation: fadeIn 0.8s ease;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 30px;
-            border-radius: 15px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .card {
+        .login-card {
             background: white;
             border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            animation: fadeIn 1s ease;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .card-header {
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid var(--light-gray);
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
         }
 
-        .card-header i {
-            font-size: 2rem;
-            color: var(--primary);
+        .login-icon i {
+            font-size: 2.5rem;
+            color: white;
         }
 
-        .card-header h3 {
-            font-size: 1.5rem;
+        .login-header h1 {
+            font-size: 1.8rem;
             color: var(--dark);
-            font-weight: 600;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-label {
@@ -146,9 +116,13 @@
             color: var(--primary);
         }
 
-        .form-input, .form-select {
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
             width: 100%;
-            padding: 14px 18px;
+            padding: 14px 18px 14px 48px;
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             font-size: 1rem;
@@ -156,10 +130,68 @@
             background: white;
         }
 
-        .form-input:focus, .form-select:focus {
+        .form-input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-dark);
         }
 
         .btn {
@@ -178,131 +210,17 @@
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
         }
 
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #059669;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            width: auto;
-            font-size: 0.9rem;
-        }
-
-        .student-list, .attendance-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .student-item, .attendance-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px;
-            margin-bottom: 12px;
-            background: var(--light-gray);
-            border-radius: 12px;
-            border-left: 5px solid var(--success);
-            transition: all 0.3s ease;
-        }
-
-        .student-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .student-item.absent {
-            border-left-color: var(--danger);
-        }
-
-        .attendance-item {
-            border-left-color: var(--primary);
-        }
-
-        .student-info {
-            flex: 1;
-        }
-
-        .student-name {
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 1.05rem;
-            margin-bottom: 4px;
-        }
-
-        .student-details {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .student-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .badge-present {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-absent {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .attendance-time {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-state h4 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: var(--dark);
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .notification {
@@ -356,20 +274,32 @@
             display: none !important;
         }
 
+        .security-info {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .security-info i {
+            color: var(--success);
+            margin-right: 6px;
+        }
+
+        .security-info p {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -389,110 +319,69 @@
         }
 
         @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .login-card {
+                padding: 30px 24px;
             }
 
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .card {
-                padding: 20px;
+            .login-header h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="login-container">
         <a href="index.html" class="back-btn">
             <i class="fas fa-arrow-left"></i> Back to Portal Selection
         </a>
 
-        <div class="header">
-            <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Portal</h1>
-            <p>Manage attendance and students</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="totalStudents">0</div>
-                <div class="stat-label">Total Students</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="presentStudents">0</div>
-                <div class="stat-label">Present Today</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="absentStudents">0</div>
-                <div class="stat-label">Absent</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="attendanceRate">0%</div>
-                <div class="stat-label">Attendance Rate</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-check-circle"></i>
-                <h3>Mark Attendance</h3>
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h1>Admin Login</h1>
+                <p>Access the teacher portal</p>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-chalkboard"></i> Select Class
-                </label>
-                <select class="form-select" id="className">
-                    <option value="">Choose class</option>
-                    <option value="SDF04">SDF04 - System Design Fundamentals</option>
-                    <option value="IM2">IM2 - Information Management 2</option>
-                    <option value="SP2">SP2 - Software Programming 2</option>
-                    <option value="SIA1">SIA1 - System Integration & Architecture 1</option>
-                </select>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" class="form-input" id="username" placeholder="Enter your username" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" class="form-input" id="password" placeholder="Enter your password" required autocomplete="current-password">
+                        <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="security-info">
+                <p><i class="fas fa-shield-alt"></i> Secure login with encrypted connection</p>
             </div>
-
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-keyboard"></i> Paste QR Code Data
-                </label>
-                <input type="text" class="form-input" id="manualCode" placeholder="Paste student QR code data here">
-            </div>
-
-            <button class="btn btn-primary" id="markAttendanceBtn">
-                <i class="fas fa-check-circle"></i> Mark Attendance
-            </button>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-users"></i>
-                <h3>Student List</h3>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-filter"></i> Filter by Class
-                </label>
-                <select class="form-select" id="viewClass">
-                    <option value="all">All Classes</option>
-                    <option value="SDF04">SDF04 - System Design Fundamentals</option>
-                    <option value="IM2">IM2 - Information Management 2</option>
-                    <option value="SP2">SP2 - Software Programming 2</option>
-                    <option value="SIA1">SIA1 - System Integration & Architecture 1</option>
-                </select>
-            </div>
-
-            <div class="student-list" id="studentList"></div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-clipboard-check"></i>
-                <h3>Today's Attendance Records</h3>
-            </div>
-
-            <div class="attendance-list" id="attendanceRecords"></div>
         </div>
     </div>
 
@@ -503,255 +392,119 @@
     <div id="notification" class="notification hidden"></div>
 
     <script>
-        var API_URL = window.location.origin;
-        let students = [];
-        let attendanceRecords = [];
+        const API_URL = window.location.origin;
+
+        // Store session in memory only
+        let sessionData = {
+            isAuthenticated: false,
+            username: null,
+            loginTime: null
+        };
 
         document.addEventListener('DOMContentLoaded', function() {
-            loadData();
             initializeEventListeners();
         });
 
         function initializeEventListeners() {
-            document.getElementById('markAttendanceBtn').addEventListener('click', submitManualAttendance);
-            document.getElementById('viewClass').addEventListener('change', filterStudents);
-        }
-
-        function loadData() {
-            loadStudents();
-            loadAttendanceRecords();
-            loadStatistics();
-        }
-
-        async function submitManualAttendance() {
-            const manualCode = document.getElementById('manualCode').value.trim();
-            const className = document.getElementById('className').value;
-
-            if (!manualCode) {
-                showNotification('Please paste QR code data', 'error');
-                return;
-            }
-
-            if (!className) {
-                showNotification('Please select a class', 'error');
-                return;
-            }
-
-            try {
-                const data = JSON.parse(manualCode);
-                
-                if (data.class !== className) {
-                    showNotification('Student not enrolled in selected class', 'error');
-                    return;
-                }
-                
-                await markAttendance(data);
-                document.getElementById('manualCode').value = '';
-            } catch (error) {
-                showNotification('Invalid QR code data', 'error');
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('togglePassword').addEventListener('click', togglePasswordVisibility);
+            
+            // Check remember me preference
+            const savedUsername = getCookie('rememberedUsername');
+            if (savedUsername) {
+                document.getElementById('username').value = savedUsername;
+                document.getElementById('rememberMe').checked = true;
             }
         }
 
-        async function markAttendance(studentData) {
-            if (!studentData || !studentData.id || !studentData.name || !studentData.class) {
-                showNotification('Invalid student data', 'error');
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            if (!username || !password) {
+                showNotification('Please enter both username and password', 'error');
                 return;
             }
 
             showLoading();
 
             try {
-                const response = await fetch(`${API_URL}/api/mark_attendance`, {
+                const response = await fetch(`${API_URL}/api/admin_login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        student_id: studentData.id,
-                        student_name: studentData.name,
-                        class: studentData.class,
-                        attendance_date: new Date().toISOString().split('T')[0],
-                        attendance_time: new Date().toLocaleTimeString()
-                    })
+                    body: JSON.stringify({ username, password })
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    showNotification(`${studentData.name} marked present`, 'success');
-                    loadData();
+                    // Store session data in memory
+                    sessionData = {
+                        isAuthenticated: true,
+                        username: username,
+                        loginTime: new Date().toISOString()
+                    };
+
+                    // Handle remember me with cookies
+                    if (rememberMe) {
+                        setCookie('rememberedUsername', username, 30);
+                    } else {
+                        deleteCookie('rememberedUsername');
+                    }
+
+                    showNotification('Login successful! Redirecting...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'teacher.html';
+                    }, 1500);
                 } else {
-                    showNotification(result.message || 'Error marking attendance', 'error');
+                    showNotification(result.message || 'Invalid username or password', 'error');
                 }
             } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
+                showNotification('Login error: ' + error.message, 'error');
             } finally {
                 hideLoading();
             }
         }
 
-        async function loadStudents() {
-            const classFilter = document.getElementById('viewClass')?.value || 'all';
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+        }
 
-            try {
-                const response = await fetch(`${API_URL}/api/get_students?class=${classFilter}`);
-                const result = await response.json();
-
-                if (result.success) {
-                    students = result.data || [];
-                    renderStudentList();
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                let c = cookie.trim();
+                if (c.indexOf(nameEQ) === 0) {
+                    return c.substring(nameEQ.length);
                 }
-            } catch (error) {
-                console.error('Error loading students:', error);
             }
+            return null;
         }
 
-        function renderStudentList() {
-            const studentListDiv = document.getElementById('studentList');
-            
-            if (!students || students.length === 0) {
-                studentListDiv.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-graduate"></i>
-                        <h4>No Students Found</h4>
-                        <p>Students will appear here after generating QR codes</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const today = new Date().toISOString().split('T')[0];
-            
-            studentListDiv.innerHTML = students.map(student => {
-                const isPresent = attendanceRecords.some(record => 
-                    record.student_id === student.student_id && 
-                    record.class === student.class &&
-                    record.attendance_date === today
-                );
-                
-                return `
-                    <div class="student-item ${isPresent ? '' : 'absent'}">
-                        <div class="student-info">
-                            <div class="student-name">${student.student_name}</div>
-                            <div class="student-details">${student.student_id} • ${student.class}</div>
-                        </div>
-                        <div class="student-actions">
-                            <span class="badge ${isPresent ? 'badge-present' : 'badge-absent'}">
-                                ${isPresent ? 'Present' : 'Absent'}
-                            </span>
-                            ${!isPresent ? `
-                                <button class="btn btn-success btn-small" onclick="markStudentAttendance('${student.student_id}', '${student.student_name}', '${student.class}')">
-                                    <i class="fas fa-check"></i> Mark
-                                </button>
-                            ` : ''}
-                            <button class="btn btn-danger btn-small" onclick="removeStudent('${student.student_id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        async function markStudentAttendance(studentId, studentName, studentClass) {
-            await markAttendance({
-                id: studentId,
-                name: studentName,
-                class: studentClass
-            });
-        }
-
-        async function removeStudent(studentId) {
-            if (!confirm('Remove this student from the system?')) {
-                return;
-            }
-
-            showLoading();
-
-            try {
-                const response = await fetch(`${API_URL}/api/remove_student`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ student_id: studentId })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    showNotification('Student removed successfully', 'success');
-                    loadData();
-                } else {
-                    showNotification(result.message || 'Error removing student', 'error');
-                }
-            } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        function filterStudents() {
-            loadStudents();
-        }
-
-        async function loadAttendanceRecords() {
-            const today = new Date().toISOString().split('T')[0];
-
-            try {
-                const response = await fetch(`${API_URL}/api/get_attendance_records?date=${today}`);
-                const result = await response.json();
-
-                if (result.success) {
-                    attendanceRecords = result.data || [];
-                    renderAttendanceRecords();
-                }
-            } catch (error) {
-                console.error('Error loading attendance:', error);
-            }
-        }
-
-        function renderAttendanceRecords() {
-            const container = document.getElementById('attendanceRecords');
-            
-            if (!attendanceRecords || attendanceRecords.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-clipboard-list"></i>
-                        <h4>No Attendance Records</h4>
-                        <p>Attendance records for today will appear here</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = attendanceRecords.map(record => `
-                <div class="attendance-item">
-                    <div class="student-info">
-                        <div class="student-name">${record.student_name}</div>
-                        <div class="student-details">${record.student_id} • ${record.class}</div>
-                    </div>
-                    <div class="attendance-time">
-                        <i class="fas fa-clock"></i> ${record.attendance_time}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function loadStatistics() {
-            const today = new Date().toISOString().split('T')[0];
-
-            try {
-                const response = await fetch(`${API_URL}/api/get_statistics?date=${today}`);
-                const result = await response.json();
-
-                if (result.success) {
-                    const stats = result.data;
-                    document.getElementById('totalStudents').textContent = stats.total_students || 0;
-                    document.getElementById('presentStudents').textContent = stats.present_students || 0;
-                    document.getElementById('absentStudents').textContent = stats.absent_students || 0;
-                    document.getElementById('attendanceRate').textContent = (stats.attendance_rate || 0) + '%';
-                }
-            } catch (error) {
-                console.error('Error loading statistics:', error);
-            }
+        function deleteCookie(name) {
+            document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
         }
 
         function showLoading() {
