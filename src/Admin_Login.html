@@ -346,18 +346,18 @@
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-user"></i> Username
+                    <label class="form-label" for="email">
+                        Email Address
                     </label>
                     <div class="input-wrapper">
-                        <i class="fas fa-user input-icon"></i>
-                        <input type="text" class="form-input" id="username" placeholder="Enter your username" required autocomplete="username">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" class="form-input" id="email" placeholder="Enter your email address" required autocomplete="email">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-lock"></i> Password
+                    <label class="form-label" for="password">
+                        Password
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock input-icon"></i>
@@ -410,9 +410,9 @@
             document.getElementById('togglePassword').addEventListener('click', togglePasswordVisibility);
             
             // Check remember me preference
-            const savedUsername = getCookie('rememberedUsername');
-            if (savedUsername) {
-                document.getElementById('username').value = savedUsername;
+            const savedEmail = getCookie('rememberedEmail');
+            if (savedEmail) {
+                document.getElementById('email').value = savedEmail;
                 document.getElementById('rememberMe').checked = true;
             }
         }
@@ -435,53 +435,47 @@
         async function handleLogin(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const rememberMe = document.getElementById('rememberMe').checked;
 
-            if (!username || !password) {
-                showNotification('Please enter both username and password', 'error');
+            if (!email || !password) {
+                showNotification('Please enter both email and password', 'error');
                 return;
             }
 
             showLoading();
 
-            try {
-                const response = await fetch(`${API_URL}/api/admin_login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
+            // Hard-coded credentials check (case-insensitive email)
+            const ADMIN_EMAIL = 'admin124@attendance.ph';
+            const ADMIN_PASSWORD = 'Admin124';
 
-                const result = await response.json();
+            // Check credentials immediately
+            if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                // Store session data in memory
+                sessionData = {
+                    isAuthenticated: true,
+                    email: email,
+                    loginTime: new Date().toISOString()
+                };
 
-                if (result.success) {
-                    // Store session data in memory
-                    sessionData = {
-                        isAuthenticated: true,
-                        username: username,
-                        loginTime: new Date().toISOString()
-                    };
-
-                    // Handle remember me with cookies
-                    if (rememberMe) {
-                        setCookie('rememberedUsername', username, 30);
-                    } else {
-                        deleteCookie('rememberedUsername');
-                    }
-
-                    showNotification('Login successful! Redirecting...', 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'teacher.html';
-                    }, 1500);
+                // Handle remember me with cookies
+                if (rememberMe) {
+                    setCookie('rememberedEmail', email, 30);
                 } else {
-                    showNotification(result.message || 'Invalid username or password', 'error');
+                    deleteCookie('rememberedEmail');
                 }
-            } catch (error) {
-                showNotification('Login error: ' + error.message, 'error');
-            } finally {
+
                 hideLoading();
+                showNotification('Login successful! Redirecting...', 'success');
+                
+                // Redirect immediately
+                setTimeout(() => {
+                    window.location.href = 'Teacher_Dashboard.html';
+                }, 1000);
+            } else {
+                hideLoading();
+                showNotification('Invalid email or password', 'error');
             }
         }
 
@@ -506,6 +500,10 @@
         function deleteCookie(name) {
             document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
         }
+
+        // Note: Hard-coded credentials for testing
+        // Email: Admin124@Attendance.ph (case-insensitive)
+        // Password: Admin124 (case-sensitive)
 
         function showLoading() {
             document.getElementById('loading').classList.remove('hidden');

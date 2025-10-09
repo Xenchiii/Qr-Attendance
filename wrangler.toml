@@ -1,9 +1,8 @@
-name = "qr-attendance-icct"
-main = "src/index.js"
+name = "qr-attendance-1vn"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = "./src"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "attendance-db"
 database_id = "e82715e9-5103-4b2c-86ce-b032d1f254d6"
-workers_dev = true
